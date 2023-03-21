@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BatteryCharge.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BatteryCharge.Controllers
 {
@@ -19,9 +21,11 @@ namespace BatteryCharge.Controllers
         }
 
         // GET: Devices
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var batteryContext = _context.Devices.Include(d => d.Owner);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var batteryContext = _context.Devices.Where(d => d.Owner!.AspNetUserId == userId);
             return View(await batteryContext.ToListAsync());
         }
 
@@ -45,19 +49,22 @@ namespace BatteryCharge.Controllers
         }
 
         // GET: Devices/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.BatteryTrackerUsers, "Id", "Id");
             return View();
         }
 
         // POST: Devices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OwnerId,Name,BatteryReplacmentCount,DateBought,BatteryCapacity,BatteryVoltage,LastRechargeDate,RechargeCycle")] Device device)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            device.OwnerId = _context.BatteryTrackerUsers.Where(i => i.AspNetUserId == userId).First().Id;
 
             if (ModelState.IsValid)
             {
@@ -65,7 +72,7 @@ namespace BatteryCharge.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.BatteryTrackerUsers, "Id", "Id", device.OwnerId);
+  
             return View(device);
         }
 
