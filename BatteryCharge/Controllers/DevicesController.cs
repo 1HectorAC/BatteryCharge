@@ -77,6 +77,7 @@ namespace BatteryCharge.Controllers
         }
 
         // GET: Devices/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Devices == null)
@@ -85,21 +86,34 @@ namespace BatteryCharge.Controllers
             }
 
             var device = await _context.Devices.FindAsync(id);
+            
             if (device == null)
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.BatteryTrackerUsers, "Id", "Id", device.OwnerId);
+            else
+            {
+                // Add check that edited device is owned by logged in user.
+                var deviceUserId = _context.Devices.Include(d => d.Owner).First(i => i.Id.Equals(id)).Owner!.AspNetUserId;
+                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (loggedInUserId != deviceUserId) {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
             return View(device);
         }
 
         // POST: Devices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,BatteryReplacmentCount,DateBought,BatteryCapacity,BatteryVoltage,LastRechargeDate,RechargeCycle")] Device device)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            device.OwnerId = _context.BatteryTrackerUsers.Where(i => i.AspNetUserId == userId).First().Id;
+
             if (id != device.Id)
             {
                 return NotFound();
@@ -125,7 +139,6 @@ namespace BatteryCharge.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.BatteryTrackerUsers, "Id", "Id", device.OwnerId);
             return View(device);
         }
 
