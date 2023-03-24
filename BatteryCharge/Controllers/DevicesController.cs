@@ -30,6 +30,7 @@ namespace BatteryCharge.Controllers
         }
 
         // GET: Devices/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Devices == null)
@@ -44,6 +45,15 @@ namespace BatteryCharge.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                // Add check that device is owned by logged in user.
+                var deviceUserId = device.Owner!.AspNetUserId;
+                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (loggedInUserId != deviceUserId)
+                    return RedirectToAction(nameof(Index));
+            }
+
 
             return View(device);
         }
@@ -64,7 +74,7 @@ namespace BatteryCharge.Controllers
         public async Task<IActionResult> Create([Bind("Id,OwnerId,Name,BatteryReplacmentCount,DateBought,BatteryCapacity,BatteryVoltage,LastRechargeDate,RechargeCycle")] Device device)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            device.OwnerId = _context.BatteryTrackerUsers.Where(i => i.AspNetUserId == userId).First().Id;
+            device.OwnerId = _context.BatteryTrackerUsers.First(i => i.AspNetUserId == userId).Id;
 
             if (ModelState.IsValid)
             {
@@ -93,12 +103,11 @@ namespace BatteryCharge.Controllers
             }
             else
             {
-                // Add check that edited device is owned by logged in user.
-                var deviceUserId = _context.Devices.Include(d => d.Owner).First(i => i.Id.Equals(id)).Owner!.AspNetUserId;
+                // Add check that device is owned by logged in user.
+                var deviceUserId = _context.Devices.Include(d => d.Owner).First(i => i.Id == id).Owner!.AspNetUserId;
                 var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (loggedInUserId != deviceUserId) {
+                if (loggedInUserId != deviceUserId) 
                     return RedirectToAction(nameof(Index));
-                }
             }
             return View(device);
         }
@@ -112,7 +121,7 @@ namespace BatteryCharge.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,BatteryReplacmentCount,DateBought,BatteryCapacity,BatteryVoltage,LastRechargeDate,RechargeCycle")] Device device)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            device.OwnerId = _context.BatteryTrackerUsers.Where(i => i.AspNetUserId == userId).First().Id;
+            device.OwnerId = _context.BatteryTrackerUsers.First(i => i.AspNetUserId == userId).Id;
 
             if (id != device.Id)
             {
@@ -143,6 +152,7 @@ namespace BatteryCharge.Controllers
         }
 
         // GET: Devices/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Devices == null)
@@ -157,11 +167,20 @@ namespace BatteryCharge.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                // Add check that device is owned by logged in user.
+                var deviceUserId = device.Owner?.AspNetUserId;
+                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (loggedInUserId != deviceUserId)
+                    return RedirectToAction(nameof(Index));
+            }
 
             return View(device);
         }
 
         // POST: Devices/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -173,6 +192,12 @@ namespace BatteryCharge.Controllers
             var device = await _context.Devices.FindAsync(id);
             if (device != null)
             {
+                // Add check that edited device is owned by logged in user.
+                var deviceUserId = _context.Devices.Include(d => d.Owner).First(i => i.Id == id).Owner!.AspNetUserId;
+                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (loggedInUserId != deviceUserId)
+                    return RedirectToAction(nameof(Index));
+
                 _context.Devices.Remove(device);
             }
             
