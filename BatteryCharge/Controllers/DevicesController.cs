@@ -29,6 +29,20 @@ namespace BatteryCharge.Controllers
             return View(await batteryContext.ToListAsync());
         }
 
+        // GET: RechargeTimes
+        [Authorize]
+        public async Task<IActionResult> ChargeTimes()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var batteryContext = _context.Devices.Where(d => d.Owner!.AspNetUserId.Equals(userId));
+
+            var currentDateDays = DateOnly.FromDateTime(DateTime.Today).DayNumber;
+            var daysSinceLastRecharge = batteryContext.Select(i => currentDateDays - DateOnly.FromDateTime(i.LastRechargeDate).DayNumber).ToList();
+            ViewBag.daysSinceLastRecharge = daysSinceLastRecharge;
+
+            return View(await batteryContext.ToListAsync());
+        }
+
         // GET: Devices/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int? id)
