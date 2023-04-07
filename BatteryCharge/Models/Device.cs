@@ -15,13 +15,13 @@ public partial class Device
 
     public DateTime DateBought { get; set; }
 
-    public int? BatteryCapacity { get; set; }
+    public int BatteryCapacity { get; set; }
 
-    public int? BatteryVoltage { get; set; }
+    public int BatteryVoltage { get; set; }
 
-    public DateTime? LastRechargeDate { get; set; }
+    public DateTime LastRechargeDate { get; set; }
 
-    public int? RechargeCycle { get; set; }
+    public int RechargeCycle { get; set; }
 
     public virtual BatteryTrackerUser? Owner { get; set; }
 }
