@@ -39,7 +39,11 @@
                     }
                     
             </div>
-            <div class="col-3"><h4><input type="button" class="btn btn-primary" value="test" /></h4></div>
+            <div class="col-3">
+                    <a class="btn btn-primary" asp-action="UpdateLastChargeDateToCurrentDate" asp-route-id="@item.Id">Just Charged</a>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </div>
+            
         </div>
     }
 </div>

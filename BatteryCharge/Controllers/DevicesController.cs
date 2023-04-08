@@ -96,7 +96,7 @@ namespace BatteryCharge.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-  
+
             return View(device);
         }
 
@@ -110,7 +110,7 @@ namespace BatteryCharge.Controllers
             }
 
             var device = await _context.Devices.FindAsync(id);
-            
+
             if (device == null)
             {
                 return NotFound();
@@ -120,7 +120,7 @@ namespace BatteryCharge.Controllers
                 // Add check that device is owned by logged in user.
                 var deviceUserId = _context.Devices.Include(d => d.Owner).First(i => i.Id == id).Owner!.AspNetUserId;
                 var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (loggedInUserId != deviceUserId) 
+                if (loggedInUserId != deviceUserId)
                     return RedirectToAction(nameof(Index));
             }
             return View(device);
@@ -214,14 +214,54 @@ namespace BatteryCharge.Controllers
 
                 _context.Devices.Remove(device);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DeviceExists(int id)
         {
-          return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UpdateLastChargeDateToCurrentDate(int? id)
+        {
+            if (id == null || _context.Devices == null)
+            {
+                return NotFound();
+            }
+            var device = _context.Devices.Include(d => d.Owner).First(i => i.Id == id);
+
+            if (device == null)
+            {
+                return NotFound();
+            }
+
+            var deviceUserId = device.Owner?.AspNetUserId;
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (loggedInUserId != deviceUserId)
+                return RedirectToAction(nameof(Index));
+
+            device.LastRechargeDate = DateTime.Now;
+            try
+            {
+                _context.Update(device);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DeviceExists(device.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(ChargeTimes));
         }
     }
 }
