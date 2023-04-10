@@ -4,60 +4,81 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Device</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BatteryReplacmentCount" class="control-label"></label>
-                <input asp-for="BatteryReplacmentCount" class="form-control" />
-                <span asp-validation-for="BatteryReplacmentCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateBought" class="control-label"></label>
-                <input asp-for="DateBought" class="form-control" />
-                <span asp-validation-for="DateBought" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BatteryCapacity" class="control-label"></label>
-                <input asp-for="BatteryCapacity" class="form-control" />
-                <span asp-validation-for="BatteryCapacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BatteryVoltage" class="control-label"></label>
-                <input asp-for="BatteryVoltage" class="form-control" />
-                <span asp-validation-for="BatteryVoltage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastRechargeDate" class="control-label"></label>
-                <input asp-for="LastRechargeDate" class="form-control" />
-                <span asp-validation-for="LastRechargeDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RechargeCycle" class="control-label"></label>
-                <input asp-for="RechargeCycle" class="form-control" />
-                <span asp-validation-for="RechargeCycle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="text-center whiteTextWithShadow">
+    <h1>Add New Device</h1>
+    <p><i>Add a new device to the list you track.</i></p>
+    <hr/>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="row text-center">
+        <div class="col-md-8 offset-md-2 lightBluePanel">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-8 offset-md-2">
+                    <label asp-for="Name" class="control-label">Device Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <hr class="dGreenColor" />
+                <h5>Device Info</h5>
+
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="BatteryReplacmentCount" class="control-label">Battery Replace Count</label>
+                        <input asp-for="BatteryReplacmentCount" class="form-control" />
+                        <span asp-validation-for="BatteryReplacmentCount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="DateBought" class="control-label">Date Bought</label>
+                        <input asp-for="DateBought" class="form-control" />
+                        <span asp-validation-for="DateBought" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="BatteryCapacity" class="control-label">Battery Capacity</label>
+                        <input asp-for="BatteryCapacity" class="form-control" />
+                        <span asp-validation-for="BatteryCapacity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="BatteryVoltage" class="control-label">Battery Voltage</label>
+                        <input asp-for="BatteryVoltage" class="form-control" />
+                        <span asp-validation-for="BatteryVoltage" class="text-danger"></span>
+                    </div>
+                </div>
+                <hr class="dGreenColor" />
+                <h5>Recharge Info</h5>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="LastRechargeDate" class="control-label">Last Recharge Date</label>
+                        <input asp-for="LastRechargeDate" class="form-control" />
+                        <span asp-validation-for="LastRechargeDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="RechargeCycle" class="control-label">Recharge Cycle</label>
+                        <input asp-for="RechargeCycle" class="form-control" />
+                        <span asp-validation-for="RechargeCycle" class="text-danger"></span>
+                    </div>
+                </div>
+                <hr class="dGreenColor" />
+
+                <div class="form-group" style="padding:10px">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+
+            <div>
+                <a asp-action="Index">Go To Devices</a>
+            </div>
+        </div>
+    </div>
 </div>
 
+
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
