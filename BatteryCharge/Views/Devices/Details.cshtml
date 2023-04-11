@@ -4,63 +4,53 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Device</h4>
+<div class="text-center whiteTextWithShadow">
+    <h1>Device Details</h1>
+    <p><i>Look at all the information of a device.</i></p>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryReplacmentCount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryReplacmentCount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateBought)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateBought)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryCapacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryCapacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryVoltage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryVoltage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastRechargeDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastRechargeDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RechargeCycle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RechargeCycle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner.Id)
-        </dd>
-    </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="row text-center">
+    <div class="col-md-8 offset-md-2 lightBluePanel">
+        <div class="col-md-8 offset-md-2">
+            <h5>Device Name</h5>
+            <p>@Html.DisplayFor(model => model.Name)</p>
+        </div>
+        <hr class="dGreenColor" />
+        <h4><u>Device Info</u></h4>
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Battery Replace Count</h5>
+                <p>@Html.DisplayFor(model => model.BatteryReplacmentCount)</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Date Bought</h5>
+                <p>@Html.DisplayFor(model => model.DateBought)</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Battery Capacity</h5>
+                <p>@Html.DisplayFor(model => model.BatteryCapacity)</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Battery Voltage</h5>
+                <p>@Html.DisplayFor(model => model.BatteryVoltage)</p>
+            </div>
+        </div>
+        <hr class="dGreenColor" />
+        <h4><u>Recharge Info</u></h4>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Last Recharge Date</h5>
+                <p>@Html.DisplayFor(model => model.LastRechargeDate)</p>
+            </div>
+            <div class="col-md-6">
+                <h5>Recharge Cycle</h5>
+                <p>@Html.DisplayFor(model => model.RechargeCycle)</p>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Index" class="btn btn-primary">Go To Devices</a>
+        </div>
+    </div>
 </div>
