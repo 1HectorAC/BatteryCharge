@@ -4,66 +4,60 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Device</h4>
+<div class="text-center whiteTextWithShadow">
+    <h1>Delete Device</h1>
+    <p><i>Delete a device from your list.</i></p>
+    <h2>Are you sure you want to delete this?</h2>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryReplacmentCount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryReplacmentCount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateBought)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateBought)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryCapacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryCapacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BatteryVoltage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BatteryVoltage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastRechargeDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastRechargeDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RechargeCycle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RechargeCycle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner.Id)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-8 offset-md-2 lightBluePanel">
+        <div class="col-md-8 offset-md-2">
+            <h5>Device Name</h5>
+            <p>@Html.DisplayFor(model => model.Name)</p>
+        </div>
+        <hr class="dGreenColor" />
+        <h4><u>Device Info</u></h4>
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Battery Replace Count</h5>
+                <p>@Html.DisplayFor(model => model.BatteryReplacmentCount)</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Date Bought</h5>
+                <p>@Model.DateBought.ToShortDateString()</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Battery Capacity</h5>
+                <p>@Html.DisplayFor(model => model.BatteryCapacity)</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Battery Voltage</h5>
+                <p>@Html.DisplayFor(model => model.BatteryVoltage)</p>
+            </div>
+        </div>
+        <hr class="dGreenColor" />
+        <h4><u>Recharge Info</u></h4>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Last Recharge Date</h5>
+                <p>@Model.LastRechargeDate.ToShortDateString()</p>
+            </div>
+            <div class="col-md-6">
+                <h5>Recharge Cycle</h5>
+                <p>@Html.DisplayFor(model => model.RechargeCycle)</p>
+            </div>
+        </div>
+        <hr class="dGreenColor" />
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div>
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
 </div>
