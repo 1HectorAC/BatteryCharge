@@ -3,47 +3,40 @@
     ViewData["Title"] = "ChargeTimes";
 }
 
-<div class="text-center" style="color:white; text-shadow: 1px 1px 2px #002133;">
+<div class="text-center whiteTextWithShadow">
     <h1>ChargeTimes</h1>
+    <p style="padding:0px;">Track when a bettery needs to be charged</p>
     <h5>@DateTime.Now.ToShortDateString() </h5>
     <hr style="color:white" />
 </div>
 
-<div class="container text-center">
-    <div class="row">
-        <div class="col-3">Name</div>
-        <div class="col-3">Last Charge Date</div>
-        <div class="col-3">Cycle</div>
-        <div class="col-3">Options</div>
-    </div>
-    @foreach(var item in Model)
+<div class="row text-center">
+    @foreach (var item in Model)
     {
-        <div class="row" style="padding:5px; margin-top:5px; background-color:white; border-radius:5px">
-            <div class="col-3">
-                <h4>
-                 @item.Name</h4></div>
-            <div class="col-3"><h4>@item.LastRechargeDate.ToShortDateString()</h4></div>
-            <div class="col-3">
-                    @if (@ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] >= item.RechargeCycle)
-                    {
-                    <h4 style="color:red">
+        <div class="col-md-3">
+            <div class="lightBluePanel">
+                <h3>@item.Name</h3>
+                <h5>Last Charge: @item.LastRechargeDate.ToShortDateString()</h5>
+                <hr />
+                @if (@ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] >= item.RechargeCycle)
+                {
+                    <h1 style="color:red">
                         @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
-                        @item.RechargeCycle
-                    </h4>
-                    }
-                    else{
-                <h4>
-                    @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
-                    @item.RechargeCycle
-                </h4>
-                    }
-                    
+                        @item.RechargeCycle days
+                    </h1>
+                }
+                else
+                {
+                    <h1>
+                        @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
+                        @item.RechargeCycle days
+                    </h1>
+                }
+                <hr />
+                <a class="btn btn-primary" asp-action="UpdateLastChargeDateToCurrentDate" asp-route-id="@item.Id">Charged Today</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
             </div>
-            <div class="col-3">
-                    <a class="btn btn-primary" asp-action="UpdateLastChargeDateToCurrentDate" asp-route-id="@item.Id">Just Charged</a>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                </div>
-            
         </div>
     }
 </div>
+
