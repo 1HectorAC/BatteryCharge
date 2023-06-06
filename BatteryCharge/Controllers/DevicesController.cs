@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BatteryCharge.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using BatteryCharge.Models.ViewModels;
 
 namespace BatteryCharge.Controllers
 {
@@ -36,11 +37,13 @@ namespace BatteryCharge.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var batteryContext = _context.Devices.Where(d => d.Owner!.AspNetUserId.Equals(userId));
 
+            // Get current date to calculate days since last chanrge.
             var currentDateDays = DateOnly.FromDateTime(DateTime.Today).DayNumber;
-            var daysSinceLastRecharge = batteryContext.Select(i => currentDateDays - DateOnly.FromDateTime(i.LastRechargeDate).DayNumber).ToList();
-            ViewBag.daysSinceLastRecharge = daysSinceLastRecharge;
 
-            return View(await batteryContext.ToListAsync());
+            var batteryChargeDetails = batteryContext.Select(i => new RechargeDeviceDetails {Id = i.Id, Name = i.Name, LastRechargeDate = i.LastRechargeDate, RechargeCycle = i.RechargeCycle, DaysSinceLastRecharge = currentDateDays - DateOnly.FromDateTime(i.LastRechargeDate).DayNumber });
+
+
+            return View(await batteryChargeDetails.ToListAsync());
         }
 
         // GET: Devices/Details/5

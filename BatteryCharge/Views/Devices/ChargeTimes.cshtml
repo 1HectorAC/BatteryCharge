@@ -1,4 +1,4 @@
-﻿@model List<BatteryCharge.Models.Device>
+﻿@model List<BatteryCharge.Models.ViewModels.RechargeDeviceDetails>
 @{
     ViewData["Title"] = "ChargeTimes";
 }
@@ -18,9 +18,8 @@
                 <h3>@item.Name</h3>
                 <h5>Last Charge: @item.LastRechargeDate.ToShortDateString()</h5>
                 <hr />
-                <h2 class="@( @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] >= item.RechargeCycle ? "alertText" : "" )">
-                    @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
-                    @item.RechargeCycle days
+                <h2 class="@( @item.DaysSinceLastRecharge >= item.RechargeCycle ? "alertText" : "" )">
+                    @item.DaysSinceLastRecharge / @item.RechargeCycle days
                 </h2>
 
                 <hr />
