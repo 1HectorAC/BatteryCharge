@@ -5,9 +5,9 @@
 
 <div class="text-center whiteTextWithShadow">
     <h1>ChargeTimes</h1>
-    <p style="padding:0px;">Track when a bettery needs to be charged</p>
+    <p>Track when a bettery needs to be charged</p>
     <h5>@DateTime.Now.ToShortDateString() </h5>
-    <hr style="color:white" />
+    <hr class="whiteText" />
 </div>
 
 <div class="row text-center">
@@ -18,20 +18,11 @@
                 <h3>@item.Name</h3>
                 <h5>Last Charge: @item.LastRechargeDate.ToShortDateString()</h5>
                 <hr />
-                @if (@ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] >= item.RechargeCycle)
-                {
-                    <h1 style="color:red">
-                        @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
-                        @item.RechargeCycle days
-                    </h1>
-                }
-                else
-                {
-                    <h1>
-                        @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
-                        @item.RechargeCycle days
-                    </h1>
-                }
+                <h2 class="@( @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] >= item.RechargeCycle ? "alertText" : "" )">
+                    @ViewBag.DaysSinceLastRecharge[@Model.IndexOf(item)] /
+                    @item.RechargeCycle days
+                </h2>
+
                 <hr />
                 <a class="btn btn-primary" asp-action="UpdateLastChargeDateToCurrentDate" asp-route-id="@item.Id">Charged Today</a>
                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
